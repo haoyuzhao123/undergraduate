@@ -1,0 +1,108 @@
+//
+//
+//
+LOAD_2 reg_1 70
+LOAD_2 reg_d 00
+LOAD_2 reg_e 70
+LOAD_2 reg_f 01
+//
+//the above 3 lines load the register 1 and 2 to 70 and 00
+//and define reg_f as 01
+//
+//
+LOAD_2 reg_3 00
+LOAD_2 reg_4 01
+//
+//register 3 is the counter of the program
+//because the program read 2 byte a time, so register 4 is used for
+//reading the next byte
+//
+//
+def#D
+//
+//
+ADD_INT reg_c reg_3 reg_d
+STORE reg_c %A
+LOAD_1 reg_5 def%A
+ADD_INT reg_c reg_c reg_f
+STORE reg_c %B
+LOAD_1 reg_6 def%B
+//
+//reg_5 and reg_6 are the registers to store the instruction
+//
+//
+LOAD_2 reg_7 f0
+LOAD_2 reg_0 30
+AND reg_8 reg_7 reg_5
+JUMP reg_8 #A
+//
+//if the operation is STORE, then jump to somewhere
+//then add 70 before copying
+//
+//
+LOAD_2 reg_0 b0
+AND reg_8 reg_7 reg_5
+JUMP reg_8 #A
+//
+//if the operation is JUMP, then jump to add 70
+//
+//
+LOAD_2 reg_0 2d
+JUMP reg_5 #A
+LOAD_2 reg_0 2e
+JUMP reg_5 #A
+//
+//also need to change the value when loading to reg_d and reg_e
+//
+//
+MOV 0 reg_a reg_0
+JUMP reg_a #B
+//
+//if nothing happens, jump to #B to copy
+//
+//
+def#A
+//
+//define tag #A
+//
+//
+ADD_INT reg_6 reg_6 reg_1
+//
+//ADD 70 before copying it
+//
+//
+def#B
+//
+//
+ADD_INT reg_9 reg_e reg_3
+STORE reg_9 %C
+STORE reg_5 def%C
+ADD_INT reg_9 reg_9 reg_f
+STORE reg_9 %D
+STORE reg_6 def%D
+//
+//STORE the 2-unit instructions
+//
+//
+ADD_INT reg_3 reg_3 reg_f
+ADD_INT reg_3 reg_3 reg_f
+ADD_INT reg_4 reg_4 reg_f
+ADD_INT reg_4 reg_4 reg_f
+//
+//register 3 and 4 plus 2 after read and copying each instruction
+//
+//
+LOAD_2 reg_0 b0
+LOAD_2 reg_a b0
+JUMP reg_5 #C
+//
+//
+JUMP reg_a #D
+//
+//
+def#C
+//
+//
+JUMP reg_0 70
+//
+//

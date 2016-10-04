@@ -1,0 +1,22 @@
+#A
+#B
+#D
+//
+//
+%A
+%B
+%C
+%D
+//
+//
+#E
+#F
+MOV 0 reg_1 reg_2
+LOAD_1 reg_C %D
+LOAD_1 reg_5 #A
+STORE reg_3 add_FF
+def#A
+JUMP reg_E #A
+LOAD_2 reg_F 1A
+STORE reg_0 def%D
+ADD_INT reg_1 reg_0 reg_1

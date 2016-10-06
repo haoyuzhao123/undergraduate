@@ -1,0 +1,15 @@
+LOAD_2 reg_1 70
+LOAD_2 reg_3 1B
+LOAD_2 reg_f ff
+LOAD_2 reg_0 00
+//
+def#A
+//
+STORE reg_3 %A
+LOAD_1 reg_4 def%A
+ADD_INT reg_5 reg_1 reg_3
+STORE reg_5 %B
+STORE reg_4 def%B
+ADD_INT reg_3 reg_3 reg_f
+JUMP reg_3 70
+JUMP reg_0 #A

@@ -1,0 +1,14 @@
+%---------------GROUP MEMBER---------------------------------------
+Haoyu Zhao, Chenzhi Zhu, Jiawei Li
+%------------------------------------------------------------------
+
+%--------------COMPILE INSTRUCTION---------------------------------
+g++ -O2 -o deryu deryu.cpp
+%------------------------------------------------------------------
+
+%--------------Brief Intro to Our Algo.----------------------------
+We use a determinized UCT when the number of the cards in hands are large.
+When the hands becomes smaller, we randomize opponent's hands and use the 
+alpha-beta pruning to compute the expected value of all possible moves, and 
+then select the move with the largest expected value.
+%------------------------------------------------------------------

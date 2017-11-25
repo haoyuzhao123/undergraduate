@@ -1,0 +1,182 @@
+%use diffent method to solve the problem 3
+
+%load the matrices as global variables
+global Am;
+
+%the first matrix
+temp = load('m=50_n=50.mat');
+Am = temp.A;
+
+alpha = 0.3;
+beta = 0.8;
+
+s = size(Am);
+eps = 1e-5;
+
+%use the L1 norm
+x = zeros(s(1),1);
+grad = grad_obj_p3(x);
+fval = obj_p3(x);
+
+count = 0;
+t_l1_s = zeros(1,0);
+f_l1_s = fval;
+while norm(grad,2) > eps,
+    delta_x = zeros(s(1),1);
+    n = norm(grad,'inf');
+    for i=1:s(1),
+        if abs(abs(grad(i)) - n) < 0.000000001,
+            delta_x(i) = sign(-grad(i));
+            break;
+        end
+    end
+    [fval,x, t] = backtrackingLS(@obj_p3,grad,x,delta_x,alpha, beta);
+    t_l1_s = [t_l1_s,t];
+    f_l1_s = [f_l1_s,fval];
+    grad = grad_obj_p3(x);
+    count = count + 1;
+end
+
+disp('the result of L1')
+fval
+count
+
+%use the L2 norm
+x = zeros(s(1),1) * 0.01;
+grad = grad_obj_p3(x);
+fval = obj_p3(x);
+
+count = 0;
+t_l2_s = zeros(1,0);
+f_l2_s = fval;
+while norm(grad,2) > eps,
+    n = norm(grad,2);
+    delta_x = - grad / n;
+    [fval,x,t] = backtrackingLS(@obj_p3,grad,x,delta_x,alpha, beta);
+    t_l2_s = [t_l2_s,t];
+    f_l2_s = [f_l2_s,fval];
+    grad = grad_obj_p3(x);
+    count = count + 1;
+end
+
+
+disp('the result of L2')
+fval
+count
+
+%use the L inf norm
+x = zeros(s(1),1);
+grad = grad_obj_p3(x);
+fval = obj_p3(x);
+
+count = 0;
+t_linf_s = zeros(1,0);
+f_linf_s = fval;
+while norm(grad,2) > eps,
+    delta_x = sign(-grad);
+    [fval,x,t] = backtrackingLS(@obj_p3,grad,x,delta_x,alpha, beta);
+    t_linf_s = [t_linf_s,t];
+    f_linf_s = [f_linf_s,fval];
+    grad = grad_obj_p3(x);
+    count = count + 1;
+end
+
+disp('the result of L inf')
+fval
+count
+
+%the second matrix
+temp = load('m=100_n=100.mat');
+Am = temp.A;
+
+s = size(Am);
+
+%use the L1 norm
+x = zeros(s(1),1);
+grad = grad_obj_p3(x);
+fval = obj_p3(x);
+
+count = 0;
+t_l1_l = zeros(1,0);
+f_l1_l = fval;
+while norm(grad,2) > eps,
+    delta_x = zeros(s(1),1);
+    n = norm(grad,'inf');
+    for i=1:s(1),
+        if abs(abs(grad(i)) - n) < 0.000000001,
+            delta_x(i) = sign(-grad(i));
+            break;
+        end
+    end
+    [fval,x,t] = backtrackingLS(@obj_p3,grad,x,delta_x,alpha, beta);
+    t_l1_l = [t_l1_l,t];
+    f_l1_l = [f_l1_l,fval];
+    grad = grad_obj_p3(x);
+    count = count + 1;
+end
+
+disp('the result of L1')
+fval
+count
+
+%use the L2 norm
+x = zeros(s(1),1) * 0.01;
+grad = grad_obj_p3(x);
+fval = obj_p3(x);
+
+count = 0;
+t_l2_l = zeros(1,0);
+f_l2_l = fval;
+while norm(grad,2) > eps,
+    n = norm(grad,2);
+    delta_x = - grad / n;
+    [fval,x,t] = backtrackingLS(@obj_p3,grad,x,delta_x,alpha, beta);
+    t_l2_l = [t_l2_l,t];
+    f_l2_l = [f_l2_l,fval];
+    grad = grad_obj_p3(x);
+    count = count + 1;
+end
+
+
+disp('the result of L2')
+fval
+count
+
+%use the L inf norm
+x = zeros(s(1),1);
+grad = grad_obj_p3(x);
+fval = obj_p3(x);
+
+count = 0;
+t_linf_l = zeros(1,0);
+f_linf_l = fval;
+while norm(grad,2) > eps,
+    delta_x = sign(-grad);
+    [fval,x,t] = backtrackingLS(@obj_p3,grad,x,delta_x,alpha, beta);
+    t_linf_l = [t_linf_l,t];
+    f_linf_l = [f_linf_l,fval];
+    grad = grad_obj_p3(x);
+    count = count + 1;
+end
+
+disp('the result of L inf')
+fval
+count
+
+%plot the value of functions and the lenght of the steps in respect to the
+%number of the iteration
+
+%50-50 value of function
+figure
+semilogy(f_l1_s - f_l1_s(end) + 1e-25, 'm')
+hold on
+semilogy(f_l2_s - f_l2_s(end) + 1e-25, 'm')
+hold on
+semilogy(f_linf_s - f_linf_s(end) + 1e-25, 'm')
+legend()
+
+figure
+
+figure
+
+figure

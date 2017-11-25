@@ -1,0 +1,8 @@
+class Main {
+    static int main() {
+	    return case(1) {
+		    1:)4;
+		    default:5;
+	    };
+    }
+}

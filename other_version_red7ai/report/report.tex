@@ -1,0 +1,37 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+
+\title{\textbf{Project Report}}
+\author{Group Member: Haoyu Zhao, Chenzhi Zhu, Jiawei Li}
+\date{}
+
+\begin{document}
+\maketitle
+\section{Brief Introduction}
+In this project, our group wrote a AI for the game red7. Red7 is a card game, which the player doesn't know the cards in the other player's hand, so it is not a perfect information game and we can not just use the perfect information stategy to implement an AI to play the card game Red7. We try 2 algorithm, the first is dynamic programming, and the second is determinized UCT, and due to their performance, we finally choose the determinized UCT.
+
+\section{Algorithms}
+
+\subsection{Determinized Alpha-Beta Pruning}
+Alpha-Beta pruning is a famous algorithm successfully applied into the perfect information game like chess. In this card game Red7, we do not know the opponent's hand cards, so we use the trick of determinization. we randomize several sets of cards for the opponent. For each random set of hand cards, we play it as a perfect information game and use the alpha-beta pruning to compute the score of each move. Then we just take the average of the score of each move and take is as a `expected score' of each move, and we choose the move with the largest expected score.
+
+\subsection{Dynamic Programming}
+We also try the strategy using the dynamic programming. In every decision point, the state of the dynamic programming can be seen as a tuple $C = (p_0,h_0,np_1,nh_1)$, where $p_0$ denotes the cards on my palette, $h_0$ denotes my hand card, $np_1$ denotes the number of new cards on the opponent's palette, and $nh_1$ denotes the number of cards in the opponent's hand. It can then write a dynamic programming between the states and compute the expected score of each state. But this method might not compute the expected score very accurately, and the performance of this is not very good, so we do not adopt this method at last.
+
+\subsection{Determinized UCT}
+Determinized UCT also use the technique of determinization, which means randomize the opponent's hand card and play the game as a perfect information game. The UCT algorithm is based on the Monte-Carlo Tree Search(MCTS), and the only difference is that it choose the move with the highest Upper Confidence Bound(UCB). This algorithm performs better than the other so we apply it in our AI.
+
+\subsection{About Resign}
+The resign is also a legal move in the game of Red7, and we just seen it as a ordinary move. The UCT and the Alpha-Beta will choose when to resign when compared with the other possible moves. The only thing is that it is not very good to resign a lot, and our solution is that we add some penalty to the resign move. In the UCT, when do the resign move, we will regard it as lose more points than actually lose, and this will control the time that resign to some extent.
+
+\subsection{About A Trick}
+When we can win and the total point is larger than 40, we seen it as we just win $40 - sc$ points, where $sc$ is the current score. By using this trick, we can ensure that we will not lose due to the resign, and we can be less aggresive when we can win.
+
+\section{Conclusion}
+Finally, for the implementation, we choose the Determinized UCT and the Determinized Apha-Beta pruning. When there are also too much hand cards in both of the players, we apply the UCT algorithm to choose the best move. When the number of total hands cards are adequate, we just apply the Alpha-Beta pruning to choose the best move. We think that the algorithm is performs OK, but the problem is that there are too many parameters in the whole implementation of this AI and the choice of the parameters is really an art. We do not have too much time to tune the parameters of the algorithms so it can also performs bad when meeting the AI with good parameters. Another problem is that other AI may have some small trick but we do not have it, so it is also a disadvantage for our AI.
+
+\end{document}

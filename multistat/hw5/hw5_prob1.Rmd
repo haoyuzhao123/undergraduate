@@ -1,0 +1,96 @@
+---
+title: "HW5_Prob1"
+author: "Haoyu_Zhao"
+date: "May 7, 2017"
+output: pdf_document
+---
+\textbf{Problem 1}
+
+\textbf{a} All the R code will shown in the report.
+
+\textbf{b}
+```{r}
+#Load the data
+#Skip the step that convert the
+#xlsx file into the csv file.
+flavor <- read.csv("flavor.csv", sep=";")
+#Delete the column that contains the variety
+flavor <- flavor[,2:9]
+#Compute the Covariance
+Cov <- cov(flavor)
+#do the PC analysis
+flavor.pc <- princomp(flavor)
+summary(flavor.pc)
+lds <- flavor.pc$loadings
+sdevs <- flavor.pc$sdev
+#the loading for the factor analysis
+l1 <- lds[,1] * sdevs[1]
+l2 <- lds[,2] * sdevs[2]
+l3 <- lds[,3] * sdevs[3]
+
+#For m=1, the loadings are
+ld <- matrix(l1, 8, 1)
+print(ld)
+#The communality
+print(ld * ld)
+#The matrix Cov - LL'
+Cov <- matrix(Cov, 8, 8)
+temp <- Cov - ld %*% t(ld)
+#The specific variance
+sv <- temp * diag(8)
+sv
+
+#the portion of variance
+sdevs[1] / sum(sdevs)
+
+#For m=2, the loadings are
+ld <- cbind(l1,l2)
+print(ld)
+#The communality
+print(rowSums(ld *ld))
+#The matrix Cov - LL'
+Cov <- matrix(Cov, 8, 8)
+temp <- Cov - ld %*% t(ld)
+#The specific variance
+sv <- temp * diag(8)
+sv
+#the portion of variance
+sdevs[1] / sum(sdevs)
+sdevs[2] / sum(sdevs)
+
+#For m=3
+ld <- cbind(l1,l2,l3)
+t(ld) %*% ld
+print(ld)
+#The communality
+print(rowSums(ld *ld))
+#The matrix Cov - LL'
+Cov <- matrix(Cov, 8, 8)
+temp <- Cov - ld %*% t(ld)
+#The specific variance
+sv <- temp * diag(8)
+sv
+#the portion of variance
+sdevs[1] / sum(sdevs)
+sdevs[2] / sum(sdevs)
+sdevs[3] / sum(sdevs)
+```
+
+```{r}
+#Then we do the factor analysis using the MLE.
+#We provide the result of m = 1,2,3.
+flavor.fa1 <- factanal(flavor, factors = 1)
+flavor.fa2 <- factanal(flavor, factors = 2)
+flavor.fa3 <- factanal(flavor, factors = 3)
+#print the result
+flavor.fa1
+flavor.fa2
+flavor.fa3
+```
+
+
+\textbf{c} The factorization of the PCA and MLE approach are much differnet. First, the PCA uses the covariance matrix, but in the `factanal' in R laguage, it uses the correlation matrix to approximate the model.
+
+When we look at the portion of variance explained by each factor, we can see that the PCA approach is much better then the MLE approach. There are 2 reasons, the first is that PCA aims to find the direction or loadings that can bestly explain the variance so it is absolutely the best if we just look at the portion of variance. The second reason is that in the `factanal' function if R language, it uses the corralation matrix to compute, but in the PCA, we use the covariance matrix to compute. This will cause some bias on the certain factor and thus increase the portion of variance that the first few factors can analysis.
+
+\textbf{d} In the PCA approach, the loadings of the first factor is a combination of all the features, and 1 of the features in the takes small weights. The loadings of the second factor contrast the first 2 features with the other features, the savor. The third factor contrast the first and the third features with other features.

@@ -1,0 +1,53 @@
+---
+title: "hw4_prob1"
+author: "Haoyu_Zhao, 2016012390"
+date: "April 26, 2017"
+output:
+  pdf_document: default
+  html_document: default
+---
+\section{a}
+All of the correlation is positive between $x_1, x_2, x_3,x_4$. The correlation between $x_1,x_2$ and $x_1,x_4$ is relatively large. They are about 0.5.
+
+\section{b}
+```{r}
+#the data input
+vec <- c(1,0.4919,0.2635,0.4653,-0.2277,0.0652,
+         0.4919,1,0.3127,0.3506,-0.1917,0.2045,
+         0.2636,0.3127,1,0.4108,0.0647,0.2493,
+         0.4653,0.3506,0.4108,1,-0.2249,0.2293,
+         -0.2277,-0.1917,0.0647,-0.2249,1,-0.2144,
+         0.0652,0.2045,0.2493,0.2293,-0.2144,1)
+
+R <- matrix(vec, c(6,6))
+#print the data
+print(R)
+
+R_p <- R[1:4, 1:4]
+
+#applying the PCA to the first 4 component
+R_p.pc <- princomp(R_p)
+
+summary(R_p.pc)
+
+#compute the eigenvector and the eigen value of R_p
+e <- eigen(R_p)
+print(e)
+```
+From the summary of the PCA and the eigen value and the eigen vector, we can do the following analysis.
+
+The first PC is a weighted sum of the 4 elements(omit all the minus sign), and the second is contrast Bluegill and Crappie with the 2 bass. The third PC contrast Bluegill and Largemouth with others and the fourth contrast Bluegill and Smallmouth with others.
+
+\section{c}
+Applying the PC analysis to all the 6 elements.
+
+```{r}
+#do the PC analysis
+R.pc <- princomp(R)
+#print the summary
+summary(R.pc)
+#print the eigenvalue and the eigenvectors
+e <- eigen(R)
+print(e)
+```
+From this analysis, we can see that the first PC contrast Walleye with the other places, the second PC is largely the sum of the Smallmouth and the Walleye, the third is almost the contrast between Bluegill and Northren pike because the coeffient in the eigenvector is much bigger than the others. We can also apply the same analysis to the last 3 PCs but becuase the first 3 is the most important and we do not interpret the last 3 PCs.

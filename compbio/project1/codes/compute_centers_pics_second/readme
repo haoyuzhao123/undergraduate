@@ -1,0 +1,1 @@
+This folder contains the result of the second time test. The red are the centers chose by the clustering algorithm, the green are the true centers, and the pruple or blue are the positive output after our second classifier.

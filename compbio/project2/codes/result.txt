@@ -1,0 +1,227 @@
+./project2mod.sh
+first clustering
+starting to cluster the images
+clustering complete
+this class has number: 248 the average cost of the class is: 135.803094737
+this class has number: 242 the average cost of the class is: 134.806757764
+this class has number: 121 the average cost of the class is: 135.896764071
+this class has number: 100 the average cost of the class is: 137.959118048
+this class has number: 417 the average cost of the class is: 137.901977866
+this class has number: 402 the average cost of the class is: 134.163919965
+this class has number: 498 the average cost of the class is: 133.851793532
+this class has number: 250 the average cost of the class is: 136.547325366
+this class has number: 386 the average cost of the class is: 136.504274767
+this class has number: 236 the average cost of the class is: 138.206355882
+this class has number: 368 the average cost of the class is: 137.590026207
+this class has number: 272 the average cost of the class is: 137.950188034
+this class has number: 199 the average cost of the class is: 137.852124623
+this class has number: 240 the average cost of the class is: 136.578972829
+this class has number: 105 the average cost of the class is: 138.701780185
+this class has number: 268 the average cost of the class is: 135.707148115
+this class has number: 119 the average cost of the class is: 137.549750364
+this class has number: 196 the average cost of the class is: 138.335237152
+this class has number: 445 the average cost of the class is: 138.147312456
+this class has number: 249 the average cost of the class is: 135.999751311
+this class has number: 156 the average cost of the class is: 139.189394053
+this class has number: 263 the average cost of the class is: 135.184345226
+this class has number: 170 the average cost of the class is: 139.476129308
+this class has number: 151 the average cost of the class is: 138.803346732
+the cost of this clustering is: 136.72224594
+first clustering complete
+second clustering
+generating second clustering data
+generating complete!
+starting to cluster the images
+clustering complete
+this class has number: 127 the average cost of the class is: 143.409505484
+this class has number: 324 the average cost of the class is: 141.233156215
+this class has number: 83 the average cost of the class is: 141.558273245
+this class has number: 90 the average cost of the class is: 140.598107591
+this class has number: 205 the average cost of the class is: 141.130014098
+this class has number: 321 the average cost of the class is: 141.472285471
+this class has number: 506 the average cost of the class is: 140.594667829
+this class has number: 157 the average cost of the class is: 143.025469201
+this class has number: 363 the average cost of the class is: 141.478424487
+this class has number: 130 the average cost of the class is: 142.284345372
+this class has number: 201 the average cost of the class is: 142.851038194
+this class has number: 267 the average cost of the class is: 141.66050027
+this class has number: 273 the average cost of the class is: 141.186895187
+this class has number: 82 the average cost of the class is: 142.259521419
+this class has number: 453 the average cost of the class is: 141.969981902
+this class has number: 180 the average cost of the class is: 142.434265367
+this class has number: 166 the average cost of the class is: 141.951416192
+this class has number: 92 the average cost of the class is: 141.795436573
+this class has number: 356 the average cost of the class is: 141.015263733
+this class has number: 274 the average cost of the class is: 141.599567046
+this class has number: 470 the average cost of the class is: 141.152062122
+this class has number: 257 the average cost of the class is: 142.175606275
+this class has number: 190 the average cost of the class is: 141.667166543
+this class has number: 317 the average cost of the class is: 141.12245908
+this class has number: 497 the average cost of the class is: 142.518043668
+the cost of this clustering is: 141.645395804
+second clustering complete
+third clustering
+generating second clustering data
+generating complete!
+starting to cluster the images
+clustering complete
+this class has number: 261 the average cost of the class is: 136.647081267
+this class has number: 293 the average cost of the class is: 138.534725387
+this class has number: 234 the average cost of the class is: 135.993152475
+this class has number: 300 the average cost of the class is: 137.330834817
+this class has number: 390 the average cost of the class is: 136.342903327
+this class has number: 255 the average cost of the class is: 137.489734698
+this class has number: 256 the average cost of the class is: 138.671610282
+this class has number: 81 the average cost of the class is: 134.379296321
+this class has number: 187 the average cost of the class is: 137.708017626
+this class has number: 227 the average cost of the class is: 135.399705371
+this class has number: 151 the average cost of the class is: 139.085008244
+this class has number: 254 the average cost of the class is: 138.772341589
+this class has number: 151 the average cost of the class is: 139.097632219
+this class has number: 294 the average cost of the class is: 135.33248203
+this class has number: 329 the average cost of the class is: 136.158918723
+this class has number: 402 the average cost of the class is: 134.410049951
+this class has number: 231 the average cost of the class is: 137.994611278
+this class has number: 159 the average cost of the class is: 138.844847595
+this class has number: 230 the average cost of the class is: 139.393542539
+this class has number: 180 the average cost of the class is: 139.088989338
+this class has number: 111 the average cost of the class is: 138.44413069
+this class has number: 209 the average cost of the class is: 138.350264164
+this class has number: 289 the average cost of the class is: 136.883242221
+this class has number: 105 the average cost of the class is: 136.853389942
+this class has number: 356 the average cost of the class is: 139.355924877
+this class has number: 273 the average cost of the class is: 135.40431566
+this class has number: 192 the average cost of the class is: 138.10733118
+this class has number: 128 the average cost of the class is: 139.432672816
+the cost of this clustering is: 137.324494997
+third clustering complete
+second clustering
+generating second clustering data
+generating complete!
+starting to cluster the images
+clustering complete
+this class has number: 504 the average cost of the class is: 143.00677878
+this class has number: 196 the average cost of the class is: 140.248744254
+this class has number: 225 the average cost of the class is: 141.379527872
+this class has number: 189 the average cost of the class is: 139.666539081
+this class has number: 94 the average cost of the class is: 143.286950751
+this class has number: 142 the average cost of the class is: 140.995304363
+this class has number: 164 the average cost of the class is: 141.427390123
+this class has number: 352 the average cost of the class is: 140.788474056
+this class has number: 82 the average cost of the class is: 140.091144452
+this class has number: 401 the average cost of the class is: 141.644610965
+this class has number: 193 the average cost of the class is: 141.689100753
+this class has number: 87 the average cost of the class is: 141.962716354
+this class has number: 490 the average cost of the class is: 140.571955746
+this class has number: 260 the average cost of the class is: 142.982487042
+this class has number: 335 the average cost of the class is: 141.928798225
+this class has number: 83 the average cost of the class is: 141.76211555
+this class has number: 348 the average cost of the class is: 141.285185255
+this class has number: 177 the average cost of the class is: 143.561628983
+this class has number: 114 the average cost of the class is: 140.810426729
+this class has number: 361 the average cost of the class is: 141.528973144
+this class has number: 326 the average cost of the class is: 141.733393862
+this class has number: 475 the average cost of the class is: 142.074073322
+this class has number: 301 the average cost of the class is: 140.793097772
+this class has number: 517 the average cost of the class is: 141.026244904
+the cost of this clustering is: 141.531619085
+second clustering complete
+third clustering
+generating second clustering data
+generating complete!
+starting to cluster the images
+clustering complete
+this class has number: 127 the average cost of the class is: 138.904084722
+this class has number: 186 the average cost of the class is: 139.303297041
+this class has number: 208 the average cost of the class is: 138.979721384
+this class has number: 318 the average cost of the class is: 136.009017041
+this class has number: 216 the average cost of the class is: 137.421587215
+this class has number: 583 the average cost of the class is: 135.369558025
+this class has number: 137 the average cost of the class is: 138.483441586
+this class has number: 348 the average cost of the class is: 138.130862743
+this class has number: 95 the average cost of the class is: 135.243161016
+this class has number: 317 the average cost of the class is: 136.274706147
+this class has number: 294 the average cost of the class is: 138.607113244
+this class has number: 263 the average cost of the class is: 135.767647302
+this class has number: 230 the average cost of the class is: 135.756322568
+this class has number: 270 the average cost of the class is: 139.666578963
+this class has number: 308 the average cost of the class is: 137.216924659
+this class has number: 179 the average cost of the class is: 139.533589465
+this class has number: 129 the average cost of the class is: 136.816140855
+this class has number: 199 the average cost of the class is: 138.732003052
+this class has number: 318 the average cost of the class is: 135.95365531
+this class has number: 208 the average cost of the class is: 137.444904331
+this class has number: 182 the average cost of the class is: 136.099508165
+this class has number: 223 the average cost of the class is: 139.845141728
+this class has number: 222 the average cost of the class is: 137.333344541
+this class has number: 216 the average cost of the class is: 139.223516896
+this class has number: 192 the average cost of the class is: 137.588433897
+this class has number: 352 the average cost of the class is: 136.246484
+this class has number: 120 the average cost of the class is: 137.314778101
+the cost of this clustering is: 137.341788264
+third clustering complete
+second clustering
+generating second clustering data
+generating complete!
+starting to cluster the images
+clustering complete
+this class has number: 175 the average cost of the class is: 143.346097523
+this class has number: 233 the average cost of the class is: 141.130202714
+this class has number: 225 the average cost of the class is: 142.626833754
+this class has number: 272 the average cost of the class is: 139.157095992
+this class has number: 249 the average cost of the class is: 142.085714372
+this class has number: 127 the average cost of the class is: 139.924955803
+this class has number: 228 the average cost of the class is: 141.981423928
+this class has number: 378 the average cost of the class is: 139.981343453
+this class has number: 310 the average cost of the class is: 141.194250888
+this class has number: 371 the average cost of the class is: 140.946154206
+this class has number: 277 the average cost of the class is: 141.67316133
+this class has number: 315 the average cost of the class is: 141.233148252
+this class has number: 99 the average cost of the class is: 141.773313766
+this class has number: 215 the average cost of the class is: 141.227002594
+this class has number: 591 the average cost of the class is: 140.643747172
+this class has number: 292 the average cost of the class is: 141.069657058
+this class has number: 164 the average cost of the class is: 139.14104342
+this class has number: 231 the average cost of the class is: 144.757437695
+this class has number: 228 the average cost of the class is: 138.917946912
+this class has number: 260 the average cost of the class is: 142.009308873
+this class has number: 313 the average cost of the class is: 143.383224544
+this class has number: 87 the average cost of the class is: 143.220569105
+this class has number: 148 the average cost of the class is: 141.812775476
+this class has number: 297 the average cost of the class is: 142.553571938
+this class has number: 291 the average cost of the class is: 141.909305021
+the cost of this clustering is: 141.415583878
+second clustering complete
+third clustering
+generating second clustering data
+generating complete!
+starting to cluster the images
+clustering complete
+this class has number: 153 the average cost of the class is: 138.136771845
+this class has number: 220 the average cost of the class is: 135.220225188
+this class has number: 318 the average cost of the class is: 139.435480614
+this class has number: 101 the average cost of the class is: 136.039063718
+this class has number: 288 the average cost of the class is: 136.620556171
+this class has number: 196 the average cost of the class is: 140.513447962
+this class has number: 375 the average cost of the class is: 134.534972637
+this class has number: 152 the average cost of the class is: 138.838537636
+this class has number: 170 the average cost of the class is: 135.43280442
+this class has number: 125 the average cost of the class is: 138.197523294
+this class has number: 240 the average cost of the class is: 135.496653401
+this class has number: 213 the average cost of the class is: 137.550309662
+this class has number: 195 the average cost of the class is: 139.167545055
+this class has number: 273 the average cost of the class is: 137.685494815
+this class has number: 261 the average cost of the class is: 136.023724379
+this class has number: 210 the average cost of the class is: 137.931620449
+this class has number: 157 the average cost of the class is: 138.770630004
+this class has number: 385 the average cost of the class is: 137.400323095
+this class has number: 280 the average cost of the class is: 137.201012067
+this class has number: 363 the average cost of the class is: 137.876437926
+this class has number: 378 the average cost of the class is: 139.086794652
+this class has number: 305 the average cost of the class is: 137.926961558
+this class has number: 119 the average cost of the class is: 135.220030366
+this class has number: 393 the average cost of the class is: 138.05378409
+this class has number: 290 the average cost of the class is: 136.735985354
+this class has number: 297 the average cost of the class is: 138.035688883
+the cost of this clustering is: 137.44850355
+third clustering complete

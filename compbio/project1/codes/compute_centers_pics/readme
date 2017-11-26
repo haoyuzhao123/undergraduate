@@ -1,0 +1,1 @@
+This folder has the scatter plot of our first test. The purple or blue dots are the positive output of our second classifier, and the red dots are the centers choose by the kmeans algorithm.

@@ -1,0 +1,31 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Computational Biology Project 1 Readme
+Haoyu Zhao, Lukai Li, Yi Dai
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The whole project is written in Python2.7, because some of the packages need Python2.7. And the system that run the whole codes is Ubuntu 16.04 LTS.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The packages that is used in the Projects are:
+numpy
+scipy
+matplotlib
+sklearn
+EMAN2 -- a third party package that can read the .mrc file
+
+The first 4 packages can be installed by pip or sudo, the EMAN2 package should unzip the file to the home directory '~/' and then change the path. I don't have the zip file anymore, and the whole package can be downloaded at 'http://blake.bcm.edu/EMAN2/'. There may be other ways to install the EMAN2 package.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The data file 'homework_data/' should be in this folder.
+
+The 'labels/' folder is created by mod_labels_file.py, and do not need to run the code again.
+
+Should first run the code generate_data.py to generate the training data for the first classifier. The command is: python generate_data.py
+
+Then run the generate_second_data.py to generate the training data for the second classifier.
+
+Then run the code first_compute.py, this will generate the 'center_xxx.npy' file and the pictures in 'first_predict_pics/'.
+
+Then run the compute_centers.py. This will generate the pictures in 'compute_centers_pics/' and the final center results in the .star file in 'centers/'
+
+The results of the last 2 steps are just printed on the terminal and I use '> log' and '> log 1' to put them in the log and log1 file in this folder.

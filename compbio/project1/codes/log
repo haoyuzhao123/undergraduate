@@ -1,0 +1,160 @@
+epoch 1 complete.
+epoch 2 complete.
+epoch 3 complete.
+epoch 4 complete.
+epoch 5 complete.
+epoch 6 complete.
+epoch 7 complete.
+epoch 8 complete.
+epoch 9 complete.
+epoch 10 complete.
+epoch 11 complete.
+epoch 12 complete.
+epoch 13 complete.
+epoch 14 complete.
+epoch 15 complete.
+epoch 16 complete.
+epoch 17 complete.
+epoch 18 complete.
+epoch 19 complete.
+epoch 20 complete.
+max of the image is 48.8114537727
+min of the image is 45.1837051275
+image 142
+#labels: 168
+#preds: 5568
+0.970238095238
+0.474317528736
+max of the image is 49.1335819802
+min of the image is 44.542488015
+image 143
+#labels: 148
+#preds: 3026
+0.966216216216
+0.516192994052
+max of the image is 48.6934479584
+min of the image is 45.5034718948
+image 144
+#labels: 162
+#preds: 6949
+0.993827160494
+0.371708159447
+max of the image is 48.9042050944
+min of the image is 44.6512323473
+image 145
+#labels: 156
+#preds: 3759
+0.884615384615
+0.423250864592
+max of the image is 49.2084027949
+min of the image is 44.9551271011
+image 146
+#labels: 138
+#preds: 1866
+0.811594202899
+0.506966773848
+max of the image is 48.5362150144
+min of the image is 44.5234793393
+image 147
+#labels: 163
+#preds: 3279
+0.914110429448
+0.448917352851
+max of the image is 49.1139870256
+min of the image is 44.0211554955
+image 148
+#labels: 154
+#preds: 1211
+0.714285714286
+0.574731626755
+max of the image is 48.7816153981
+min of the image is 45.4184360098
+image 149
+#labels: 177
+#preds: 2776
+0.83615819209
+0.426152737752
+max of the image is 49.1363861043
+min of the image is 44.3991152639
+image 150
+#labels: 169
+#preds: 3406
+0.958579881657
+0.551967116853
+max of the image is 51.3042757346
+min of the image is 42.9480638705
+image 151
+#labels: 79
+#preds: 1908
+0.0632911392405
+0.00366876310273
+max of the image is 50.3987864561
+min of the image is 43.1092866479
+image 152
+#labels: 162
+#preds: 1012
+0.648148148148
+0.570158102767
+max of the image is 49.0100143368
+min of the image is 45.8767265489
+image 153
+#labels: 147
+#preds: 7188
+0.993197278912
+0.383973288815
+max of the image is 49.0401104964
+min of the image is 45.8482610973
+image 154
+#labels: 163
+#preds: 6683
+0.993865030675
+0.43363758791
+max of the image is 49.0057815713
+min of the image is 44.580226047
+image 155
+#labels: 141
+#preds: 1882
+0.843971631206
+0.549415515409
+max of the image is 48.3780973853
+min of the image is 44.8173685621
+image 156
+#labels: 173
+#preds: 5756
+0.959537572254
+0.379603891591
+max of the image is 48.5096843827
+min of the image is 44.732774041
+image 157
+#labels: 186
+#preds: 5200
+0.951612903226
+0.451923076923
+max of the image is 48.5469310588
+min of the image is 45.535480316
+image 158
+#labels: 173
+#preds: 6170
+0.976878612717
+0.408265802269
+max of the image is 49.7660522864
+min of the image is 44.143089129
+image 159
+#labels: 114
+#preds: 2096
+0.0526315789474
+0.00667938931298
+max of the image is 50.201977294
+min of the image is 43.6172212465
+image 160
+#labels: 160
+#preds: 381
+0.425
+0.632545931759
+max of the image is 49.9745697472
+min of the image is 41.6530752189
+image 161
+#labels: 141
+#preds: 143
+0.106382978723
+0.181818181818

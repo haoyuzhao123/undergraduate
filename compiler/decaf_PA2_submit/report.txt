@@ -1,0 +1,36 @@
+编译原理PA2实验报告
+
+赵浩宇,2016012390,计科60
+
+实验目的：
+学习符号表的相关知识，学习语义检查的相关知识，并且实现对Decaf新增语言特性进行检查。
+
+主要工作：
+1.复数的实现
+	a.在BuildSym中的visitTypeIdent函数加入相应复数代码。
+	b.在TypeCheck中的visitUnary函数中加入新增的与复数有关的一元运算符。报错则复用了IncompatUnOpError。
+	c.在TypeCheck中的visitLiteral，visitTypeIdent函数中加入相应的复数类型的代码。
+	d.在TypeCheck中的checkBinaryOp中的加法与乘法的相应代码中加入复数运算的部分。
+	e.在TypeCheck中加入visitPrintComp语句，对应新增语法的复数打印语句。
+2.Case语句的相应实现
+	a.在TypeCheck中加入visitDefaultExpr
+	b.在TypeCheck中加入visitACaseExpr，在语义检查是新增了IncompatCaseError错误。
+	c.在TypeCheck中加入visitCaseExpr，在语义检查时复用了IncompatCaseError错误。同时增加了CondNotUniError错误，表示语句的条件不唯一，以及IncompatACaseExprError错误，表示某一个aCaseExpr的返回值与defaultExpr的返回值不相同。
+
+3.super相关实现
+	a.在TypeCheck中加入visitSuperExpr，基本仿照visitThisExpr，加入了SuperInStaticFuncError错误。
+	b.在TypeCheck中的visitCallExpr中加入判断super的相应语句，通过expr.tag即可判断。并且加入了ParentNotFoundError的错误。并且通过查看方法是否在this中出现判断应该报Field还是Method的相关错误。
+	c.在TypeCheck中的visitIdent中加入判断super的相应语句，并且加入了SuperMemberNotSupported错误。
+
+4.dcopy,scopy相关实现
+	a.在TypeCheck中加入visitDcopyExpr,visitScopyExpr，基本仿照instanceof的相关实现，加入了NotCopyClassError错误。
+	b.在TypeCheck中的visitAssign中加入判断dcopy,scopy的相应语句，通过expr.tag即可判断。并且加入了CopyClassNotSameErro的错误。
+
+
+5.do,od相关语句的实现
+	a.在BuildSym中加入visitDoSubStmt以及visitDoStmt。
+	b.在TypeCheck中加入visitDoSubStmt以及visitDoStmt。并且加入DoCondError错误。支持break语句。
+
+
+实验收获：
+通过对语义检查的相关实现，学习了访问者模式，以及符号表的相关知识。并且通过对Decaf新增语言特性的语义检查，对Decaf新增语言特性有了更加深入的了解。

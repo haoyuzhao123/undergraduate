@@ -86,6 +86,7 @@ t = t / mu_ba;
 
 lambda_ba = 1 ./ (t * x_ba);
 mu_ba = v / t;
+p_ba = fval;
 
 fprintf('fval = %f, count_cum = %d \n', fval, count_cum)
 
@@ -100,3 +101,4 @@ title('对偶间隙与迭代次数')
 save('x_ba.mat','x_ba')
 save('lambda_ba.mat','lambda_ba')
 save('mu_ba.mat','mu_ba')
+save('p_ba','p_ba')

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="tacvm">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/tools/tacvm-dev/src/decaf/tacvm/tacvm.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

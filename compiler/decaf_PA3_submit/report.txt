@@ -1,0 +1,38 @@
+编译原理PA３实验报告
+
+赵浩宇,2016012390,计科60
+
+实验目的：
+再次对AST进行多次扫描，生成新语言特性所对应的三地址码。
+
+主要工作：
+1.复数的实现
+	a.在/symbol/Variable中进行修改，加入复数运算时候的实部与虚部。
+	b.修改/translate/TransPass1中的visitClassDef,visitMethodDef,visitVarDef中修改相应代码，主要是与复数存储有关。
+	c.修改/translate/TransPass2中的visitVarDef,visitBinary,visitAssign,visitLiteral,visitUnary,visitIdent,visitCallExpr,visitCaseExpr,visitPrintComp中加入相应与复数有关的代码。
+	d.修改/translate/Translater中的memOf，主要针对复数传参的打印。
+	e.修改/tree/Tree中的Expr节点，加入复数运算的实部与虚部。
+	f.修改/symbol/Class中的resolveFieldOrder，使其在处理复数是多分配一个寄存器。
+2.Case语句的相应实现
+	a.在/translate/TransPass2中加入visitDefaultExpr,visitACaseExpr,visitCaseExpr即可，生成相应的tac代码。
+
+3.super相关实现
+	a.在/translate/TransPass2中加入visitSuperExpr，返回值与visitThisExpr一样。
+	b.由于不支持多态，所以在TransPass2的visitClassDef中加入全局变量currentClass，在出现this与super函数调用的时候通过currentClass来获取相应被调用函数的虚表地址以及函数地址。
+
+4.dcopy,scopy相关实现
+	a.在/translate/TransPass2中加入visitScopyExpr，查找拷贝目标对象的大小，生成一个新的对象，并且讲原来对象的内存直接拷贝即可。
+	b.在/translate/Translater中加入genDCOPY，对对象的所有变量进行遍历，如果是variable则进行复制，否则略过。遇到类对象则递归调用genDCOPY，进行复制，遇到COMPLEX对象则复制两次即可。
+	c.在/translate/TransPass2中加入visitDcopyExpr，调用genDCOPY即可。
+
+
+5.do,od相关语句的实现
+	a.在/translate/TransPass2中加入visitDoSubStmt,visitDoStmt即可，生成相应的tac代码。
+
+6.DivisionByZero相关语句的实现
+	a.仿照其他两种运行时错误，在Translater中加入genCheckNum函数，并且修改RunTimeError，加入DIVISION_BY_ZERO错误。
+	b.修改/translate/TransPass2中的visitBinary，使其再做除法以及取余运算的时候先调用genCheckNum。
+
+
+实验收获：
+通过对新特性生成相应的三地址码，更加深入地了解了编译器的构造以及其原理。

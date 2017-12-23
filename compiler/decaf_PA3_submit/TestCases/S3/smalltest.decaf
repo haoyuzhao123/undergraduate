@@ -1,0 +1,40 @@
+class A  {
+    class B a;
+    void init() {
+        a = new B();
+    }
+    void set(int x) {
+        a.setb(x);
+    }
+    void printa() {
+        a.printb();
+    }
+}
+
+class B {
+    int b;
+    void setb(int x) {
+        b = x;
+    }
+    void printb() {
+        Print(b);
+    }
+}
+
+class Main {
+    static void main() {
+        class A b;
+        class A d;
+        b = new A();
+        int x;
+        x = 1;
+        b.init();
+        b.set(x);
+        d = dcopy(b);
+        x = 2;
+        b.set(x);
+
+        b.printa();
+        d.printa();
+    }
+}

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="tac">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/TestCases/S3/tac.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

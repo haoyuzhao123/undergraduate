@@ -1,0 +1,154 @@
+%Homework template created by Haoyu Zhao, Oct 23,2017
+\documentclass{article}
+
+    \usepackage{ctex}
+    \usepackage{fontspec}
+    
+    %the math packages
+    \usepackage{amsmath,amsfonts,amssymb,amsthm}
+    \theoremstyle{plain}
+    \newtheorem{thm}{Theorem}[section]
+    \newtheorem{lem}[thm]{Lemma}
+    \newtheorem{prop}[thm]{Proposition}
+    \newtheorem*{cor}{Corollary}
+    
+    \theoremstyle{definition}
+    \newtheorem{defn}{Definition}[section]
+    \newtheorem{conj}{Conjecture}[section]
+    \newtheorem{exmp}{Example}[section]
+    
+    \theoremstyle{remark}
+    \newtheorem*{rem}{Remark}
+    \newtheorem*{note}{Note}
+    
+    \usepackage{mathtools}
+    \usepackage{optidef}
+    %add new math packages here
+    
+    %--------------------------
+    
+    
+    %the algorithm packages
+    \usepackage{algorithm}
+    \usepackage{algorithmicx}
+    \usepackage{algpseudocode}
+    \algrenewcommand\algorithmicrequire{\textbf{Input:}}
+    \algrenewcommand\algorithmicensure{\textbf{Output:}}
+    %add new algorithm packages here
+    
+    %-------------------------------
+    
+    \usepackage{graphicx}
+    \usepackage{tikz}
+    \usepackage{subfigure}
+    
+    \usepackage{listings}
+    
+    % In case you need to adjust margins:
+    \topmargin=-0.45in      %
+    \evensidemargin=0in     %
+    \oddsidemargin=0in      %
+    \textwidth=6.5in        %
+    \textheight=9.0in       %
+    \headsep=0.25in         %
+    
+    %newcommand for the format of the homework
+    \newcommand{\Answer}{\ \\\textbf{Answer:} }
+    \newcommand{\Acknowledgement}[1]{\ \\{\bf Acknowledgement:} #1}
+    
+    \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+    %end the newcommand for this part
+    
+    %new command for the partial derivatives
+    \newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+    \newcommand{\spd}[3]{\frac{\partial^2 #1}{\partial #2 \partial #3}}
+    \newcommand{\grad}[1]{\nabla #1}
+    \newcommand{\curl}[1]{\nabla \times #1}
+    \newcommand{\dive}[1]{\nabla \cdot #1}
+    %end the new command for this part
+    
+    \title{\bf\huge 数值分析实验四}
+    \author{赵浩宇,2016012390,计科60}
+    
+    \begin{document}
+    
+    \maketitle
+    
+    \section{实验要求}
+    \textbf{1.} 用不同数值方法计算积分$I = \int_0^1 e^xdx$。首先使用复合梯形公式与复合辛普森公式，通过预想估计步长大小，然后根据估计的步长进行程序实验。之后用龙贝格积分计算，如果达到相同精度，许多将区间分为多少等份。
+
+    \textbf{2.} 用复合高斯公式对$4\int_0^1 \frac{1}{1+x^2}$ 做近似积分。是对步长$h$作先验估计，然后根据高斯复合公式进行近似积分，最后将理论值$\pi$与实验结果进行比较。
+    
+    \section{算法描述}
+    \textbf{1.} 对于复合梯形求积分方法，在对步长进行先验估计之后，通过给定的公式
+    \[I \approx \frac{h}{2}\sum_{i=0}^{n-1}\left(f(x_i) + f(x_{i+1})\right),\]
+    进行计算即可。
+
+    \textbf{2.} 对于复合辛普森求积分方法，在对步长进行先验估计之后，通过给定的公式
+    \[I \approx \frac{h}{6}\sum_{i=0}^{n-1}\left(f(x_i) + f(x_{i+1}) + 4f\left(\frac{x_i+x_{i+1}}{2}\right)\right),\]
+    进行计算即可。
+
+    \textbf{3.} 对于龙贝格求积分方法，首先依据公式计算$T_0^{(k)}$, 其中
+    \[T_0^{(k)} = \frac{1}{2}T_0^{(k-1)} + \frac{h}{2}\sum_{i=0}^{2^{k-1}-1}f(x_{i+\frac{1}{2}}).\]
+    之后再根据外推法的公式，计算$T_k^{(0)}$，其中计算公式为
+    \[T_m^{(k)} = \frac{4^m}{4^m-1}T_{m-1}^{(k+1)} - \frac{1}{4^m-1}T_{m-1}^{(k)}.\]
+    如果$|T_k^{0} - T_{k-1}^0|<\epsilon$，则终止计算，所得结果$I\approx T_k^0$。
+
+    \textbf{4.} 对于高斯求积公式，在对步长进行先验估计之后，根据给定的积分公式，
+    \[I \approx \frac{h}{2}\sum_{i=0}^{n-1}\left(f(x_i) + f(x_{i+1}\right),\]
+    进行计算即可。
+    
+    
+    \section{程序清单}
+    详细程序清单见表\ref{list}。
+    \begin{table}[!htbp]
+        \centering
+        \begin{tabular}{c|c}
+            \hline
+            \hline
+            文件名称 & 作用 \\
+            \hline
+            code.cc & 实验代码\\
+            integral.out & 实验结果输出文件\\
+            report.tex & 实验报告源码\\
+            report.pdf & 实验报告\\
+            \hline
+            \hline
+        \end{tabular}
+        \caption{程序清单}
+        \label{list}
+    \end{table}
+
+    \section{运行结果}
+    首先根据复合梯形公式的余项，
+    \[R_n(f) = -\frac{b-a}{12}h^2f''(\eta),\]
+    复合辛普森公式的余项，
+    \[R_n(f) = -\frac{b-a}{180}\left(\frac{h}{2}\right)^4f^{(4)}(\eta),\]
+    以及高斯求积分公式的余项
+    \[R_n(f) = \frac{(b-a)h^4}{4320}f^{(4)}(\eta),\]
+    经过计算，得到对于复合梯形公式需要$n=476$，对于复合辛普森需要$n=6$，对于高斯求积方法需要$n=13$，将计算出来的理论值代入程序，不同数值积分方法的运行结果，包括$n$的值，对区间的等分数，计算结果，以及误差，均在表\ref{result}中给出。其中step表示区间的等分数。
+
+    \begin{table}[!htbp]
+        \centering
+        \begin{tabular}{l|llll}
+            \hline
+            \hline
+            方法名称 & n   & val            & err            & step \\
+            \hline
+            复合梯形 & 476 & 1.718282460433 & 0.000000631974 & 476  \\
+            复合辛普森 & 6   & 1.718282288438 & 0.000000459979 & 12   \\
+            龙贝格 & 3   & 1.718281828795 & 0.000000000335 & 8    \\
+            高斯 & 13  & 3.141592653681 & 0.000000000091 & 13 \\
+            \hline
+            \hline 
+        \end{tabular}
+        \caption{运行结果}
+        \label{result}
+    \end{table}
+
+    原始运行结果在`integral.out'文件中给出。通过误差的计算可以知道，实际中的误差比理论中的误差要小。
+    
+    \section{体会与展望}
+    通过数值积分的实验，知道了一些数值积分的方法，知道了在工程上或者积分解析解足够困难的时候如何去处理积分。做完这个实验中我觉得收获很大。
+    
+    \end{document}

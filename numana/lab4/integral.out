@@ -1,0 +1,8 @@
+T method, n: 476, val: 1.718282460433, err: 0.000000631974
+
+Simpson method, n: 6, val: 1.718282288438, err: 0.000000459979
+
+Romberg method, n: 3, val: 1.718281828795, err: 0.000000000335
+
+Gaussian method, n: 13, val: 3.141592653681, err: 0.000000000091
+

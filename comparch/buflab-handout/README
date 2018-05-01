@@ -1,0 +1,26 @@
+2016012390, Haoyu Zhao
+=====================================================
+The command to run the tasks are given below
+-----------------------------------------------------
+
+Level0:
+cat level0.txt | ./hex2raw | ./bufbomb -u 2016012390
+
+Level1:
+cat level1.txt | ./hex2raw | ./bufbomb -u 2016012390
+
+Level2:
+cat level2.txt | ./hex2raw | ./bufbomb -u 2016012390
+
+Level3:
+cat level3.txt | ./hex2raw | ./bufbomb -u 2016012390
+
+Level4:
+cat level4.txt | ./hex2raw -n | ./bufbomb -n -u 2016012390
+-----------------------------------------------------
+
+Or you can just run the script run.sh
+-----------------------------------------------------
+=====================================================
+
+

@@ -1,0 +1,203 @@
+%Homework template created by Haoyu Zhao, Oct 23,2017
+\documentclass{article}
+
+\usepackage{ctex}
+\usepackage{fontspec}
+
+%the math packages
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem*{cor}{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
+\newtheorem{conj}{Conjecture}[section]
+\newtheorem{exmp}{Example}[section]
+
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+\newtheorem*{note}{Note}
+
+\usepackage{mathtools}
+\usepackage{optidef}
+%add new math packages here
+
+%--------------------------
+
+
+%the algorithm packages
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+%add new algorithm packages here
+
+%-------------------------------
+
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{subfigure}
+
+\usepackage{listings}
+
+% In case you need to adjust margins:
+\topmargin=-0.45in      %
+\evensidemargin=0in     %
+\oddsidemargin=0in      %
+\textwidth=6.5in        %
+\textheight=9.0in       %
+\headsep=0.25in         %
+
+%newcommand for the format of the homework
+\newcommand{\Answer}{\ \\\textbf{Answer:} }
+\newcommand{\Acknowledgement}[1]{\ \\{\bf Acknowledgement:} #1}
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+%end the newcommand for this part
+
+%new command for the partial derivatives
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\spd}[3]{\frac{\partial^2 #1}{\partial #2 \partial #3}}
+\newcommand{\grad}[1]{\nabla #1}
+\newcommand{\curl}[1]{\nabla \times #1}
+\newcommand{\dive}[1]{\nabla \cdot #1}
+%end the new command for this part
+
+\title{\bf\huge 数值分析实验四}
+\author{赵浩宇,2016012390,计科60}
+
+\begin{document}
+
+\maketitle
+
+\section{实验要求}
+考虑n阶希尔伯特矩阵$H_n$，其元素为$h_{ij}=\frac1{i+j-1}$。
+
+（1）按$\infty-$范数计算$H_3,H_4$的条件数。
+
+（2）令$n=10$，生成Hilbert矩阵，并构造向量$b=H_nx$，其中x是所有分量都是1的列向量，用矩阵三角分解（LU分解）的方法求解以$H_n$作为系数矩阵的线性方程组$H_nx=b$，得到近似解$\hat x$，计算残差$r=b-H_n\hat x$的$\infty-$范数$||r||_{\infty}$，以及误差$\Delta x=\hat x-x$的$\infty-$范数$||\Delta x||_{\infty}$
+
+（3）(选做)由于上述矩阵为对称矩阵，采用平方根法（Cholesky分解）重新求解上述方程，比较其与LU分解方法的运行效率。
+
+（4）让上述线性方程组的右端项b产生$10^{-7}$的扰动，然后重新求解上述方程组，观察得到的解产生的误差的变化情况
+
+（5）减小或增大n的值，观察$||\Delta x||_{\infty}$的变化情况，n取大约多少值时，误差达到$100\%$？
+
+\section{算法描述}
+\textbf{1.} 首先求条件数的算法可分为两步，第一步是求出矩阵$A$的逆矩阵$A^{-1}$，第二步则是计算条件数。对于第一步，可以将矩阵写为$[A I]$，之后对这个矩阵进行行变换，对$A$进行高斯消元使其变为$I$，那么复合矩阵变为$[I,B]$，那么$B$就是$A$的逆矩阵。这是因为
+\[A^{-1}A = I \Rightarrow A^{-1}I = B \Rightarrow A^{-1} = B.\]
+有了矩阵及其逆矩阵，求条件数只需要根据矩阵无穷范数的定义，找出行的绝对值和最大的即可。
+
+\textbf{2.} 用LU分解法解方程的算法需要两步，第一步是对矩阵进行LU分解，第二步则是通过LU分解解出方程。首先LU分解可以使用公式，$U$的第一行和$L$的第一列可以确定。
+\[u_{1i} = a_{1i}, l_{i1} = \frac{a_{i1}}{a_11}.\]
+之后如果$L,U$的前$r-1$行和$r-1$列已知，那么可以得到
+\[u_{ri} = a_{ri} - \sum_{k=1}^{r-1}l_{rk}u_{ki},i = r,\dots,n.\]
+同理也可以得到
+\[u_{ri} = \frac{a_{ri} - \sum_{k=1}^{r-1}l_{ik}u_{kr}}{u_{rr}},i = r+1,\dots,n.\]
+则LU分解可以得到。下面进行第二步，假设我们要求解$Ax = b$而且$A = LU$，那么首先可以求出$y$使得$Ly = b$，这个求解比较容易，之后再求解$x$使得$Ux = y$即可。
+
+\textbf{3.} 与LU分解法差不多，Cholesky可以描述为如下算法
+\begin{algorithm}[!htbp]
+    \centering
+    \begin{algorithmic}[1]
+        \Require $A$
+        \Ensure $L$,其中$A = LL^T$.
+        \Procedure{Cholesky}{$A$}
+            \For{$j=1,2,\dots,n$}
+                \State $l_{jj} = (a_{jj} - \sum_{k=1}^{j-1}l_{jk}^2)^{\frac{1}{2}}$.
+                \State $l_{ij} = (a_{ij} - \sum_{k=1}^{j-1}l_{ik}l_{jk})/l_{jj},i = j+1,\dots,n$.
+            \EndFor
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+与LU分解法解方程相同，假设我们要求解$Ax = b$而且$A = LL^T$，那么首先可以求出$y$使得$Ly = b$，这个求解比较容易，之后再求解$x$使得$L^Tx = y$即可。
+    
+\section{程序清单}
+详细程序清单见表\ref{list}。
+\begin{table}[!htbp]
+    \centering
+    \begin{tabular}{c|c}
+        \hline
+        \hline
+        文件名称 & 作用 \\
+        \hline
+        codes.cc & 实验代码\\
+        lab.out & 实验结果输出文件\\
+        report.tex & 实验报告源码\\
+        report.pdf & 实验报告\\
+        \hline
+        \hline
+    \end{tabular}
+    \caption{程序清单}
+    \label{list}
+\end{table}
+
+\section{运行结果}
+\textbf{1.} 计算可以得到，当$n=3$时，无穷范数意义下的条件数为$728$。当$n=4$时，在无穷范数意义下的条件数为$28375$。
+
+\textbf{2.} 下面给出LU分解，Cholesky分解，与加入扰动之后的LU分解得到的$||r||_{\infty},||\Delta x||_{\infty}$，结果在表\ref{p234res}中给出。LU分解与Cholesky分解得到的答案在`lab.out'中给出。同时对比LU分解与Cholesky分解的运行效率，可以知道Cholesky分解效率约为LU分解的一半左右。
+
+\begin{table}[!htbp]
+    \centering
+    \begin{tabular}{|l|l|l|}
+    \hline\hline
+    Method     & $||r||_{\infty}$ & $||\Delta x||_{\infty}$ \\ \hline
+    LU         & 0.000000000000   & 0.000436911530          \\
+    Cholesky   & 0.000000000000   & 0.000444585071          \\
+    LU-Perturb & 0.000000000000   & 0.700640814414          \\ \hline
+    \end{tabular}
+    \caption{不同的计算方法对应的$||r||_{\infty},||\Delta x||_{\infty}$}
+    \label{p234res}
+\end{table}
+
+
+\textbf{3.} 当对$n$的值进行调整并且将结果进行输出，结果见表\ref{p5res}。可以看出，当$n=13$时，误差已经超过$100\%$。
+
+\begin{table}[!htbp]
+    \centering
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \hline
+    $n$ & $||r||_{\infty}$ & $||\Delta x||_{\infty}$ \\
+    \hline
+        5  & 0.000000000000 & 0.000000000003   \\
+        6  & 0.000000000000 & 0.000000000425   \\
+        7  & 0.000000000000 & 0.000000015222   \\
+        8  & 0.000000000000 & 0.000000487042   \\
+        9  & 0.000000000000 & 0.000016869114   \\
+        10 & 0.000000000000 & 0.000436911530   \\
+        11 & 0.000000000000 & 0.009726486882   \\
+        12 & 0.000000000000 & 0.204232243715   \\
+        13 & 0.000000000000 & 6.493529661418   \\
+        14 & 0.000000000000 & 10.428207690148  \\
+        15 & 0.000000000000 & 8.355047567109   \\
+        16 & 0.000000000000 & 9.180072412591   \\
+        17 & 0.000000000000 & 18.416462283497  \\
+        18 & 0.000000000000 & 46.128917552869  \\
+        19 & 0.000000000000 & 13.341959391111  \\
+        20 & 0.000000000000 & 58.516277170010  \\
+        21 & 0.000000000000 & 61.697589597599  \\
+        22 & 0.000000000000 & 67.008000514975  \\
+        23 & 0.000000000000 & 171.558350683744 \\
+        24 & 0.000000000000 & 46.170493102604  \\
+        25 & 0.000000000000 & 151.476438012963 \\
+        26 & 0.000000000000 & 122.603044468031 \\
+        27 & 0.000000000000 & 61.096976107076  \\
+        28 & 0.000000000000 & 548.858039252004 \\
+        29 & 0.000000000000 & 82.203974368480 \\ \hline\hline
+    \end{tabular}
+    \caption{不同的$n$对应的$||r||_{\infty},||\Delta x||_{\infty}$}
+    \label{p5res}
+\end{table}
+
+原始及完整运行结果在`lab.out'文件中给出。
+    
+\section{体会与展望}
+通过进行数值线性代数的实验，更深入的了解了LU分解以及Cholesky分解的算法以及运行效率。并且通过数值稳定性实验，知道了Hilbert矩阵的数值不稳定的性质，将数值分析理论与实践结合起来。
+
+\end{document}

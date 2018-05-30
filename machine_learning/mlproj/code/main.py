@@ -1,0 +1,248 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jan  3 22:57:03 2018
+
+@author: zhy
+"""
+
+import tensorflow as tf
+import numpy as np
+
+from const import Const
+
+from tensorflow.examples.tutorials.mnist import input_data
+mnist = input_data.read_data_sets('MNIST_data', one_hot = True)
+
+
+#functions for initializing the parameters
+def weight_variable(shape):
+    initial = tf.truncated_normal(shape, stddev = 0.1)
+    return tf.Variable(initial)
+    
+def bias_variable(shape):
+    initial = tf.constant(0.1, shape = shape)
+    return tf.Variable(initial)
+    
+def squash(vector):
+    '''Squashing function corresponding to Eq. 1
+    Args:
+        vector: A tensor with shape [batch_size, 1, num_caps, vec_len, 1] or [batch_size, num_caps, vec_len, 1].
+    Returns:
+        A tensor with the same shape as vector but squashed in 'vec_len' dimension.
+    '''
+    vec_squared_norm = tf.reduce_sum(tf.square(vector), -2, keep_dims=True)
+    scalar_factor = vec_squared_norm / (1 + vec_squared_norm) / tf.sqrt(vec_squared_norm + Const.epsilon)
+    vec_squashed = scalar_factor * vector  # element-wise
+    return(vec_squashed)
+
+def routing(vec, b_IJ):
+    ''' The routing algorithm.
+
+    Args:
+        input: A Tensor with [batch_size, num_caps_l=1152, 1, length(u_i)=8, 1]
+               shape, num_caps_l meaning the number of capsule in the layer l.
+    Returns:
+        A Tensor of shape [batch_size, num_caps_l_plus_1, length(v_j)=16, 1]
+        representing the vector output `v_j` in the layer l+1
+    Notes:
+        u_i represents the vector output of capsule i in the layer l, and
+        v_j the vector output of capsule j in the layer l+1.
+     '''
+
+    # W: [num_caps_i, num_caps_j, len_u_i, len_v_j]
+    W = tf.get_variable('Weight', shape=(1, Const.dcaps_size, 10, Const.length_pcaps, \
+                                         Const.length_dcaps), dtype=tf.float32, initializer=tf.random_normal_initializer(stddev=0.1))
+
+    # Eq.2, calc u_hat
+    # do tiling for input and W before matmul
+    # input => [batch_size, 1152, 10, 8, 1]
+    # W => [batch_size, 1152, 10, 8, 16]
+    vec = tf.tile(vec, [1, 1, 10, 1, 1])
+    W = tf.tile(W, [Const.batch_size, 1, 1, 1, 1])
+    #assert vec.get_shape() == [batch_size, 1152, 10, 8, 1]
+
+    # in last 2 dims:
+    # [8, 16].T x [8, 1] => [16, 1] => [batch_size, 1152, 10, 16, 1]
+    # tf.scan, 3 iter, 1080ti, 128 batch size: 10min/epoch
+    # u_hat = tf.scan(lambda ac, x: tf.matmul(W, x, transpose_a=True), input, initializer=tf.zeros([1152, 10, 16, 1]))
+    # tf.tile, 3 iter, 1080ti, 128 batch size: 6min/epoch
+    u_hat = tf.matmul(W, vec, transpose_a=True)
+    #assert u_hat.get_shape() == [batch_size, 1152, 10, 16, 1]
+
+    # In forward, u_hat_stopped = u_hat; in backward, no gradient passed back from u_hat_stopped to u_hat
+    u_hat_stopped = tf.stop_gradient(u_hat, name='stop_gradient')
+    
+    iter_routing = 3
+
+    # line 3,for r iterations do
+    for r_iter in range(iter_routing):
+        with tf.variable_scope('iter_' + str(r_iter)):
+            # line 4:
+            # => [batch_size, 1152, 10, 1, 1]
+            c_IJ = tf.nn.softmax(b_IJ, dim=2)
+
+            # At last iteration, use `u_hat` in order to receive gradients from the following graph
+            if r_iter == iter_routing - 1:
+                # line 5:
+                # weighting u_hat with c_IJ, element-wise in the last two dims
+                # => [batch_size, 1152, 10, 16, 1]
+                s_J = tf.multiply(c_IJ, u_hat)
+                # then sum in the second dim, resulting in [batch_size, 1, 10, 16, 1]
+                s_J = tf.reduce_sum(s_J, axis=1, keep_dims=True)
+                #assert s_J.get_shape() == [batch_size, 1, 10, 16, 1]
+
+                # line 6:
+                # squash using Eq.1,
+                v_J = squash(s_J)
+                #assert v_J.get_shape() == [batch_size, 1, 10, 16, 1]
+            elif r_iter < iter_routing - 1:  # Inner iterations, do not apply backpropagation
+                s_J = tf.multiply(c_IJ, u_hat_stopped)
+                s_J = tf.reduce_sum(s_J, axis=1, keep_dims=True)
+                v_J = squash(s_J)
+
+                # line 7:
+                # reshape & tile v_j from [batch_size ,1, 10, 16, 1] to [batch_size, 1152, 10, 16, 1]
+                # then matmul in the last tow dim: [16, 1].T x [16, 1] => [1, 1], reduce mean in the
+                # batch_size dim, resulting in [1, 1152, 10, 1, 1]
+                v_J_tiled = tf.tile(v_J, [1, Const.dcaps_size, 1, 1, 1])
+                u_produce_v = tf.matmul(u_hat_stopped, v_J_tiled, transpose_a=True)
+                #assert u_produce_v.get_shape() == [batch_size, 1152, 10, 1, 1]
+
+                # b_IJ += tf.reduce_sum(u_produce_v, axis=0, keep_dims=True)
+                b_IJ += u_produce_v
+
+    return(v_J)
+
+def main():
+    X = tf.placeholder(tf.float32, shape = [None, 784])
+    Y_ = tf.placeholder(tf.float32, shape = [None, 10])
+    
+    X_image = tf.reshape(X, [-1,28,28,1])
+    
+    #the first convolution layer with ReLU activation function
+    W_conv1 = weight_variable([Const.ker_size_conv,Const.ker_size_conv,1,Const.ker_output_conv])
+    b_conv1 = bias_variable([Const.ker_output_conv])
+    h_conv1 = tf.nn.relu(tf.nn.conv2d(X_image, W_conv1, strides=[1,Const.ker_strides_conv,Const.ker_strides_conv,1], \
+                                    padding='VALID') + b_conv1)
+    
+    #the primecaps
+    W_primarycaps = weight_variable([Const.ker_size_pcaps,Const.ker_size_pcaps, \
+                                     Const.ker_output_conv,Const.ker_output_pcaps * Const.length_pcaps])
+    primarycaps = tf.nn.conv2d(h_conv1, W_primarycaps, strides=[1,Const.ker_strides_pcaps,Const.ker_strides_pcaps,1], padding='VALID')
+    tf.reshape(primarycaps, [Const.batch_size,-1,Const.length_pcaps,1])
+    primarycaps = squash(primarycaps)
+    
+    #the digitcaps
+    primarycaps = tf.reshape(primarycaps, [Const.batch_size,-1,1,Const.length_pcaps,1])
+        
+    #assume that the size of the strides matches
+    conv_len = 28 - Const.ker_size_conv + 1
+    assert(conv_len % Const.ker_strides_conv == 0)
+    conv_len = conv_len / Const.ker_strides_conv
+    
+    pcaps_len = conv_len - Const.ker_size_pcaps + 1
+    assert(pcaps_len % Const.ker_strides_pcaps == 0)
+    pcaps_len = pcaps_len / Const.ker_strides_pcaps
+    
+    size_of_dcaps = Const.ker_output_pcaps * pcaps_len ** 2
+    assert(size_of_dcaps == Const.dcaps_size)
+    #10 is the number of output here
+    b_IJ = tf.constant(np.zeros([Const.batch_size, Const.dcaps_size, 10, 1, 1], dtype=np.float32))
+    
+    ## edit here
+    digitcaps = routing(primarycaps, b_IJ)
+    digitcaps = tf.squeeze(digitcaps, axis=1)
+    
+    #masking
+    # a). calc ||v_c||, then do softmax(||v_c||)
+    # [batch_size, 10, 16, 1] => [batch_size, 10, 1, 1]
+    v_length = tf.sqrt(tf.reduce_sum(tf.square(digitcaps),
+                                          axis=2, keep_dims=True) + Const.epsilon)
+    softmax_v = tf.nn.softmax(v_length, dim=1)
+    assert softmax_v.get_shape() == [Const.batch_size, 10, 1, 1]
+
+    # b). pick out the index of max softmax val of the 10 caps
+    # [batch_size, 10, 1, 1] => [batch_size] (index)
+    argmax_idx = tf.to_int32(tf.argmax(softmax_v, axis=1))
+    assert argmax_idx.get_shape() == [Const.batch_size, 1, 1]
+    argmax_idx = tf.reshape(argmax_idx, shape=(Const.batch_size, ))
+    
+    # self.masked_v = tf.matmul(tf.squeeze(self.caps2), tf.reshape(self.Y, (-1, 10, 1)), transpose_a=True)
+    masked_v = tf.multiply(tf.squeeze(digitcaps), tf.reshape(Y_, (-1, 10, 1)))
+    v_length = tf.sqrt(tf.reduce_sum(tf.square(digitcaps), axis=2, keep_dims=True) + Const.epsilon)
+    
+    #reconstruction
+    vector_j = tf.reshape(masked_v, shape=(Const.batch_size, -1))
+    fc1 = tf.contrib.layers.fully_connected(vector_j, num_outputs=Const.size_fc1)
+    fc2 = tf.contrib.layers.fully_connected(fc1, num_outputs=Const.size_fc2)
+    decoded = tf.contrib.layers.fully_connected(fc2, num_outputs=784, activation_fn=tf.sigmoid)
+    
+    #compute the loss
+    # 1. The margin loss
+
+    # [batch_size, 10, 1, 1]
+    # max_l = max(0, m_plus-||v_c||)^2
+    max_l = tf.square(tf.maximum(0., Const.m_plus - v_length))
+    # max_r = max(0, ||v_c||-m_minus)^2
+    max_r = tf.square(tf.maximum(0., v_length - Const.m_minus))
+    assert max_l.get_shape() == [Const.batch_size, 10, 1, 1]
+
+    # reshape: [batch_size, 10, 1, 1] => [batch_size, 10]
+    max_l = tf.reshape(max_l, shape=(Const.batch_size, -1))
+    max_r = tf.reshape(max_r, shape=(Const.batch_size, -1))
+
+    # calc T_c: [batch_size, 10]
+    # T_c = Y, is my understanding correct? Try it.
+    T_c = Y_
+    # [batch_size, 10], element-wise multiply
+    L_c = T_c * max_l + Const.lambda_val * (1 - T_c) * max_r
+
+    margin_loss = tf.reduce_mean(tf.reduce_sum(L_c, axis=1))
+
+    # 2. The reconstruction loss
+    orgin = tf.reshape(X, shape=(Const.batch_size, -1))
+    squared = tf.square(decoded - orgin)
+    reconstruction_err = tf.reduce_mean(squared)
+
+    # 3. Total loss
+    # The paper uses sum of squared error as reconstruction error, but we
+    # have used reduce_mean in `# 2 The reconstruction loss` to calculate
+    # mean squared error. In order to keep in line with the paper,the
+    # regularization scale should be 0.0005*784=0.392
+    total_loss = margin_loss + Const.regularization_scale * reconstruction_err
+    
+    #prediction accuraccy
+    correct_prediction = tf.equal(tf.cast(tf.argmax(Y_,1),tf.int32), argmax_idx)
+    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+    
+    #training
+    step = tf.Variable(0, trainable = False)
+    optimizer = tf.train.AdamOptimizer()
+    train_op = optimizer.minimize(total_loss,global_step=step)
+    
+    with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
+        print('variable initialized.')
+        print('begin training')
+        for i in range(10000):
+            batch = mnist.train.next_batch(Const.batch_size)
+            if i % 10 == 0:
+                train_accuracy = accuracy.eval(feed_dict = {X: batch[0], Y_: batch[1]})
+                print('step %d, training accuracy %g' % (i, train_accuracy))
+            train_op.run(feed_dict = {X: batch[0], Y_: batch[1]})
+            
+        
+        #print('test accuracy %g' % accuracy.eval(
+        #        feed_dict={x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
+
+        acc = np.zeros(10)
+        for j in range(10):
+            batch = mnist.test.next_batch(1000)
+            acc[j] = accuracy.eval(feed_dict={X: batch[0], Y_: batch[1]})
+            print('test data batch %d accuracy: %g' % (j,acc[j]))
+        print('test accuracy: %g' % (np.sum(acc)/10))
+    
+    
+    
+if __name__ == '__main__':
+    main()

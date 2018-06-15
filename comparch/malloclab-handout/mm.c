@@ -76,20 +76,22 @@ static unsigned int list_head_addr;
 void insert_node(char *bp) {
     char *next = (char *)list_head_addr;
     if(next != NULL) {
-        PUT(PREV_PTR(next),bp);
+        PUT(PREV_PTR(next),(unsigned int)bp);
     }
-    PUT(NEXT_PTR(bp),next);
+    PUT(NEXT_PTR(bp),(unsigned int)next);
     list_head_addr = (unsigned int)bp;
 }
 void delete_node(char *bp) {
-    char *prev = GET(PREV_PTR(bp));
-    char *next = GET(NEXT_PTR(bp));
+    char *prev = (char *)GET(PREV_PTR(bp));
+    char *next = (char *)GET(NEXT_PTR(bp));
     if(prev == NULL) {
         if(next != NULL)PUT(PREV_PTR(next),0);
         list_head_addr = (unsigned int)next;
     } else {
-        if(next != NULL)PUT(PREV_PTR(next),prev);
-        PUT(NEXT_PTR(prev),next);
+        if(next != NULL) {
+            PUT(PREV_PTR(next),(unsigned int)prev);
+        }
+        PUT(NEXT_PTR(prev),(unsigned int)next);
     }
     PUT(NEXT_PTR(bp),0);
     PUT(PREV_PTR(bp),0);
@@ -274,7 +276,7 @@ static void *find_fit(size_t size) {
         if(GET_SIZE(HDRP(bp))>=size) {
             return bp;
         }
-        bp = GET(NEXT_PTR(bp));
+        bp = (char *)GET(NEXT_PTR(bp));
     }
     return NULL;
 }

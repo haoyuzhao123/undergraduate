@@ -69,23 +69,24 @@ static void place(void *bp,size_t asize);
 
 //global variable
 static char *heap_listp = NULL;
-static char *list_head = NULL;
+//use an unsigned int value to represent the address of the list head
+static unsigned int list_head_addr;
 
 //insert node and delete node helper function
 void insert_node(char *bp) {
-    char *next = GET(list_head);
+    char *next = (char *)list_head_addr;
     if(next != NULL) {
         PUT(PREV_PTR(next),bp);
     }
     PUT(NEXT_PTR(bp),next);
-    PUT(list_head,bp);
+    list_head_addr = (unsigned int)bp;
 }
 void delete_node(char *bp) {
     char *prev = GET(PREV_PTR(bp));
     char *next = GET(NEXT_PTR(bp));
     if(prev == NULL) {
         if(next != NULL)PUT(PREV_PTR(next),0);
-        PUT(list_head,next);
+        list_head_addr = (unsigned int)next;
     } else {
         if(next != NULL)PUT(PREV_PTR(next),prev);
         PUT(NEXT_PTR(prev),next);
@@ -95,18 +96,16 @@ void delete_node(char *bp) {
 }
 
 int mm_init(void) {
-    if((heap_listp = mem_sbrk(6*WSIZE))==(void *)-1) return -1;
+    if((heap_listp = mem_sbrk(4*WSIZE))==(void *)-1) return -1;
 
     PUT(heap_listp,0);
     //space for the list_head
-    PUT(heap_listp+(1*WSIZE),0);
-    PUT(heap_listp+(2*WSIZE),0);
-    PUT(heap_listp+(3*WSIZE),PACK(DSIZE,1));
-    PUT(heap_listp+(4*WSIZE),PACK(DSIZE,1));
-    PUT(heap_listp+(5*WSIZE),PACK(0,1));
-    list_head = heap_listp + (1*WSIZE);
+    PUT(heap_listp+(1*WSIZE),PACK(DSIZE,1));
+    PUT(heap_listp+(2*WSIZE),PACK(DSIZE,1));
+    PUT(heap_listp+(3*WSIZE),PACK(0,1));
 
     heap_listp += (4*WSIZE);
+    list_head_addr = 0;
 
     return 0;
 }
@@ -218,7 +217,6 @@ void *mm_realloc(void *ptr, size_t size) {
     }
     // end of this situation, use the original malloc.
     
-
     newptr = mm_malloc(size);
 
     if(!newptr) {
@@ -271,7 +269,7 @@ static void *coalesce(void *bp) {
 
 static void *find_fit(size_t size) {
     /*first fit*/
-    char *bp = GET(list_head);
+    char *bp = (char *)list_head_addr;
     while(bp != NULL) {
         if(GET_SIZE(HDRP(bp))>=size) {
             return bp;

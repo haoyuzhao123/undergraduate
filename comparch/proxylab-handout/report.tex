@@ -1,0 +1,97 @@
+%Homework template created by Haoyu Zhao, Oct 23,2017
+\documentclass{article}
+
+    \usepackage{ctex}
+    \usepackage{fontspec}
+    
+    %the math packages
+    \usepackage{amsmath,amsfonts,amssymb,amsthm}
+    \theoremstyle{plain}
+    \newtheorem{thm}{Theorem}[section]
+    \newtheorem{lem}[thm]{Lemma}
+    \newtheorem{prop}[thm]{Proposition}
+    \newtheorem*{cor}{Corollary}
+    
+    \theoremstyle{definition}
+    \newtheorem{defn}{Definition}[section]
+    \newtheorem{conj}{Conjecture}[section]
+    \newtheorem{exmp}{Example}[section]
+    
+    \theoremstyle{remark}
+    \newtheorem*{rem}{Remark}
+    \newtheorem*{note}{Note}
+    
+    \usepackage{mathtools}
+    \usepackage{optidef}
+    %add new math packages here
+    
+    %--------------------------
+    
+    
+    %the algorithm packages
+    \usepackage{algorithm}
+    \usepackage{algorithmicx}
+    \usepackage{algpseudocode}
+    \algrenewcommand\algorithmicrequire{\textbf{Input:}}
+    \algrenewcommand\algorithmicensure{\textbf{Output:}}
+    %add new algorithm packages here
+    
+    %-------------------------------
+    
+    \usepackage{graphicx}
+    \usepackage{tikz}
+    \usepackage{subfigure}
+    
+    \usepackage{listings}
+    
+    % In case you need to adjust margins:
+    \topmargin=-0.45in      %
+    \evensidemargin=0in     %
+    \oddsidemargin=0in      %
+    \textwidth=6.5in        %
+    \textheight=9.0in       %
+    \headsep=0.25in         %
+    
+    %newcommand for the format of the homework
+    \newcommand{\Answer}{\ \\\textbf{Answer:} }
+    \newcommand{\Acknowledgement}[1]{\ \\{\bf Acknowledgement:} #1}
+    
+    \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+    %end the newcommand for this part
+    
+    %new command for the partial derivatives
+    \newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+    \newcommand{\spd}[3]{\frac{\partial^2 #1}{\partial #2 \partial #3}}
+    \newcommand{\grad}[1]{\nabla #1}
+    \newcommand{\curl}[1]{\nabla \times #1}
+    \newcommand{\dive}[1]{\nabla \cdot #1}
+    %end the new command for this part
+    
+    \title{\bf\huge proxy lab实验报告}
+    \author{赵浩宇,2016012390,计科60}
+    
+    \begin{document}
+    
+    \maketitle
+
+    \section{实验要求}
+    本次实验中，要求编写一个缓存Web对象的简单Http代理。
+
+    \section{算法概述}
+    主要分为三部分，第一个部分实现一个顺序执行的Http代理，第二个部分对第一部分进行拓展，实现一个多线程的Http代理，第三个部分实现本地缓存。
+
+    \section{详细实现描述}
+    \subsection{顺序执行Http代理}
+    这个部分不是非常的难，但是很。首先要实现对请求的字符串进行分析，需要实现一个parse函数，还需要构建header。在doit函数中，感觉就是按部就班的去把每一个需要实现的功能实现出来，但是错误处理是比较麻烦的。
+
+    \subsection{多线程Http代理}
+    这个部分是最简单的，只需要加入thread函数，在函数内分离当前线程，使得执行完毕之后被自动回收即可。
+
+    \subsection{本地缓存Http代理}
+    这一部分感觉上是比较麻烦的，但是可能由于测例的原因，要想通过测试，并不用写得非常的完美。我采用的方法是首先将每一块cache block抽象成一个结构体，之后再将cache block的数组抽象成cache结构体。cache的替换策略就采用LRU。但是一个比较重要的问题是，当多线程的时候，如果不加sem，那么读和写都是非常不安全的，这样可能会两个页面都写到一个cache block中去，也有可能有线程在同时读写，这非常不安全。我的实现方法是，对每一个cache block加一个锁，不管是读还是写都只能有一个线程进行操作。同时对于全局计数器counter，也用一个信号量实现互斥。这样安全性可以得到保证，但是性能上肯定是有些慢的。
+    
+    \section{思考与讨论}
+    通过这个实验，我更加深入地理解了IO，网络，以及并发编程的相关内容，我的cache的实现感觉依然可以改的更好，比如说读和写是互斥的，但是可以允许多个进程来读。
+    
+
+\end{document}
